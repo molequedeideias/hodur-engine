@@ -220,7 +220,7 @@
     (is (= 2
            (-> unit-type :field/_parent count)))
     (is (= true
-           (-> unit-param :param/type :type/enum)) )
+           (-> unit-param :param/type :type/enum)))
     (is (= "String"
            (-> friends :field/type :type/name)))
     (is (= '[0 n]

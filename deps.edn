@@ -1,21 +1,28 @@
 {:paths ["src" "resources"]
 
  :deps
- {org.clojure/clojure {:mvn/version "1.10.1"}
-  datascript          {:mvn/version "0.18.7"}
-  camel-snake-kebab   {:mvn/version "0.4.1"}}
+        {org.clojure/clojure {:mvn/version "1.10.1"}
+         datascript          {:mvn/version "0.18.7"}
+         camel-snake-kebab   {:mvn/version "0.4.1"}}
 
  :aliases
- {:test
-  {:extra-paths ["test"]
-   :extra-deps
-   {lambdaisland/kaocha {:mvn/version "0.0-565"}}
-   :main-opts ["-m" "kaocha.runner"]}
+        {:test
+                {:extra-paths ["test"]
+                 :extra-deps
+                              {lambdaisland/kaocha        {:mvn/version "0.0-565"}
+                               nubank/matcher-combinators {:mvn/version "1.2.5"},
+                               midje                      {:mvn/version "1.9.9"}}
+                 :main-opts   ["-m" "kaocha.runner"]}
 
-  :fig {:extra-deps
-        {org.clojure/clojurescript {:mvn/version "1.10.339"}
-         com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}
-         com.bhauman/figwheel-main {:mvn/version "0.1.9"}}
-        :extra-paths ["target" "test"]}
-  :build {:main-opts ["-m" "figwheel.main" "-b" "dev" "-r"]}
-  :min   {:main-opts ["-m" "figwheel.main" "-O" "advanced" "-bo" "dev"]}}}
+         :dev
+                {:extra-deps
+                 {vvvvalvalval/scope-capture-nrepl {:mvn/version "0.3.1"}
+                  meander/epsilon                  {:mvn/version "0.0.383"}}}
+
+         :fig   {:extra-deps
+                              {org.clojure/clojurescript       {:mvn/version "1.10.339"}
+                               com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}
+                               com.bhauman/figwheel-main       {:mvn/version "0.1.9"}}
+                 :extra-paths ["target" "test"]}
+         :build {:main-opts ["-m" "figwheel.main" "-b" "dev" "-r"]}
+         :min   {:main-opts ["-m" "figwheel.main" "-O" "advanced" "-bo" "dev"]}}}
