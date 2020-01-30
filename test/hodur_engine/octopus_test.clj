@@ -6,7 +6,7 @@
             [matcher-combinators.matchers :as mt]
             [datascript.core :as d]
             [hodur-engine.core :as engine.core]
-            [hodur-engine.octopus-extensions :as engine.octopus]))
+            [hodur-engine.octopus :as engine.octopus]))
 
 (deftest expandir-com-metados-dominio
 

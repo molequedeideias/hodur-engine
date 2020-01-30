@@ -1,4 +1,4 @@
-(ns hodur-engine.octopus-extensions
+(ns hodur-engine.octopus
   (:require #?@(:clj
                 [[clojure.edn :as edn]
                  [clojure.java.io :as io]])
@@ -49,21 +49,14 @@
 
 (defn init-schema
   [source-schema & others]
-  (let [meta-db (engine/init-schema source-schema others)]
-    (d/transact meta-db (extra-data-about-enums meta-db))
-    meta-db))
-
-(defn init-schema
-  [source-schema & others]
-  (let [meta-db (engine/init-schema source-schema others)]
+  (let [meta-db (apply engine/init-schema (into [source-schema] others))]
     (d/transact meta-db (extra-data-about-enums meta-db))
     meta-db))
 
 #?(:clj
    (defn init-path
      [path & others]
-     (let [meta-db (if others (engine/init-path path others)
-                              (engine/init-path path))]
+     (let [meta-db (apply engine/init-path (into [path] others))]
 
        (d/transact meta-db (extra-data-about-enums meta-db))
        meta-db)))
