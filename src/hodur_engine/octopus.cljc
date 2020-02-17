@@ -47,19 +47,65 @@
        (reduce into [])
        distinct))
 
+
+#_(def ^:private meta-schema
+    {;;general meta nodes
+     :node/type             {:db/index true}
+
+     ;;type meta nodes
+     :type/name             {:db/unique :db.unique/identity}
+     :type/kebab-case-name  {:db/unique :db.unique/identity}
+     :type/PascalCaseName   {:db/unique :db.unique/identity}
+     :type/camelCaseName    {:db/unique :db.unique/identity}
+     :type/snake_case_name  {:db/unique :db.unique/identity}
+     :type/implements       {:db/cardinality :db.cardinality/many
+                             :db/valueType   :db.type/ref}
+     :type/interface        {:db/index true}
+     :type/enum             {:db/index true}
+     :type/union            {:db/index true}
+
+     ;;field meta nodes
+     :field/name            {:db/index true}
+     :field/kebab-case-name {:db/index true}
+     :field/PascalCaseName  {:db/index true}
+     :field/camelCaseName   {:db/index true}
+     :field/snake_case_name {:db/index true}
+     :field/parent          {:db/cardinality :db.cardinality/one
+                             :db/valueType   :db.type/ref}
+     :field/type            {:db/cardinality :db.cardinality/one
+                             :db/valueType   :db.type/ref}
+     :field/union-type      {:db/cardinality :db.cardinality/one
+                             :db/valueType   :db.type/ref}
+
+     ;;param meta nodes
+     :param/name            {:db/index true}
+     :param/kebab-case-name {:db/index true}
+     :param/PascalCaseName  {:db/index true}
+     :param/camelCaseName   {:db/index true}
+     :param/snake_case_name {:db/index true}
+     :param/parent          {:db/cardinality :db.cardinality/one
+                             :db/valueType   :db.type/ref}
+     :param/type            {:db/cardinality :db.cardinality/one
+                             :db/valueType   :db.type/ref}})
+
+
+(defn extend-meta-db
+  [conn schema]
+  #_(clojure.pprint/pprint schema)
+  (d/transact! conn schema)
+  conn)
+
 (defn init-schema
   [source-schema & others]
   (let [meta-db (apply engine/init-schema (into [source-schema] others))]
-    (d/transact meta-db (extra-data-about-enums meta-db))
-    meta-db))
+    (extend-meta-db meta-db (extra-data-about-enums meta-db))))
 
 #?(:clj
    (defn init-path
      [path & others]
      (let [meta-db (apply engine/init-path (into [path] others))]
 
-       (d/transact meta-db (extra-data-about-enums meta-db))
-       meta-db)))
+       (extend-meta-db meta-db (extra-data-about-enums meta-db)))))
 
 #_(let [meta-db (init-schema
                   '[^{:datomic/tag                true

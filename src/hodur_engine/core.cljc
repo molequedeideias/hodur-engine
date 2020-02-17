@@ -16,45 +16,58 @@
 
 (def ^:private temp-id-map (atom {}))
 
+(def ^:private meta-schema-octopus
+  {;;
+   :model.enum/dominio                   {:db/index       true
+                                          :db/cardinality :db.cardinality/many}
+   :model.attr/calculado?                {:db/index true}
+   :model.attr/estrategia-calculo        {:db/index true}
+   :model.attr/metodo-de-calculo         {:db/index true}
+   :model.attr/dominio                   {:db/index true}
+   :model.attr/metadados-evento-externo? {:db/index true}
+   :model.attr/persiste-estado-workflow? {:db/index true}})
+
 (def ^:private meta-schema
-  {;;general meta nodes
-   :node/type             {:db/index true}
+  (merge {;;general meta nodes
+          :node/type             {:db/index true}
 
-   ;;type meta nodes
-   :type/name             {:db/unique :db.unique/identity}
-   :type/kebab-case-name  {:db/unique :db.unique/identity}
-   :type/PascalCaseName   {:db/unique :db.unique/identity}
-   :type/camelCaseName    {:db/unique :db.unique/identity}
-   :type/snake_case_name  {:db/unique :db.unique/identity}
-   :type/implements       {:db/cardinality :db.cardinality/many
-                           :db/valueType   :db.type/ref}
-   :type/interface        {:db/index true}
-   :type/enum             {:db/index true}
-   :type/union            {:db/index true}
+          ;;type meta nodes
+          :type/name             {:db/unique :db.unique/identity}
+          :type/kebab-case-name  {:db/unique :db.unique/identity}
+          :type/PascalCaseName   {:db/unique :db.unique/identity}
+          :type/camelCaseName    {:db/unique :db.unique/identity}
+          :type/snake_case_name  {:db/unique :db.unique/identity}
+          :type/implements       {:db/cardinality :db.cardinality/many
+                                  :db/valueType   :db.type/ref}
+          :type/interface        {:db/index true}
+          :type/enum             {:db/index true}
+          :type/union            {:db/index true}
 
-   ;;field meta nodes
-   :field/name            {:db/index true}
-   :field/kebab-case-name {:db/index true}
-   :field/PascalCaseName  {:db/index true}
-   :field/camelCaseName   {:db/index true}
-   :field/snake_case_name {:db/index true}
-   :field/parent          {:db/cardinality :db.cardinality/one
-                           :db/valueType   :db.type/ref}
-   :field/type            {:db/cardinality :db.cardinality/one
-                           :db/valueType   :db.type/ref}
-   :field/union-type      {:db/cardinality :db.cardinality/one
-                           :db/valueType   :db.type/ref}
+          ;;field meta nodes
+          :field/name            {:db/index true}
+          :field/kebab-case-name {:db/index true}
+          :field/PascalCaseName  {:db/index true}
+          :field/camelCaseName   {:db/index true}
+          :field/snake_case_name {:db/index true}
+          :field/parent          {:db/cardinality :db.cardinality/one
+                                  :db/valueType   :db.type/ref}
+          :field/type            {:db/cardinality :db.cardinality/one
+                                  :db/valueType   :db.type/ref}
+          :field/union-type      {:db/cardinality :db.cardinality/one
+                                  :db/valueType   :db.type/ref}
 
-   ;;param meta nodes
-   :param/name            {:db/index true}
-   :param/kebab-case-name {:db/index true}
-   :param/PascalCaseName  {:db/index true}
-   :param/camelCaseName   {:db/index true}
-   :param/snake_case_name {:db/index true}
-   :param/parent          {:db/cardinality :db.cardinality/one
-                           :db/valueType   :db.type/ref}
-   :param/type            {:db/cardinality :db.cardinality/one
-                           :db/valueType   :db.type/ref}})
+          ;;param meta nodes
+          :param/name            {:db/index true}
+          :param/kebab-case-name {:db/index true}
+          :param/PascalCaseName  {:db/index true}
+          :param/camelCaseName   {:db/index true}
+          :param/snake_case_name {:db/index true}
+          :param/parent          {:db/cardinality :db.cardinality/one
+                                  :db/valueType   :db.type/ref}
+          :param/type            {:db/cardinality :db.cardinality/one
+                                  :db/valueType   :db.type/ref}}
+         meta-schema-octopus))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; FIXME: move these to a README/TUTORIAL when one is available
