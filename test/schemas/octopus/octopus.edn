@@ -1,50 +1,76 @@
-[^{:datomic/tag true
+[^{:datomic/tag                true
    :model.attr/apenas-runtime? false}
  default
 
-  ^:interface
-  Person
-  [^String name]
+ ^:interface
+ Person
+ [^String name
+  ^Estado-Workflow-Person status-person]
 
-  Employee
-  [^String name
-   ^{:datomic/type          :db.type/tuple
-     :datomic/tupleType     :db/long
-     :model.attr/persisted? true} tupla
-   ^{:type             String
-     :doc              "The very employee number of this employee"
-     :datomic/unique   :db.unique/identity
-     :datomic/fulltext false}
-   number
-   ^Float salary
-   ^Integer age
-   ^DateTime start-date
-   ^Employee supervisor
-   ^{:type        Employee
-     :cardinality [0 n]
-     :doc         "Has documentation"
-     :deprecation "But also deprecation"}
-   co-workers
-   ^{:datomic/type               :db.type/keyword
-     :model.attr/apenas-runtime? true}
-   keyword-type
-   ^{:datomic/type :db.type/uri}
-   uri-type
-   ^{:datomic/type :db.type/double}
-   double-type
-   ^{:datomic/type :db.type/bigdec
-     :deprecation  "This is deprecated"}
-   bigdec-type
-   ^EmploymentType employment-type
-   ^SearchResult last-search-results]
+ ^{:interface true}
+ Workflow
+ [^{:type Estados-Workflow, :cardinality 1, :optional false
+    :model.attr/persiste-estado-workflow? true
+    :doc  "Estado da máquina de estados associada à entidade"} status
+  ^{:type String, :cardinality 1, :optional false,
+    :doc  "Identificador do workflow - namespace completo"} ident]
 
-  ^{:union true}
-  SearchResult
-  [Employee Person EmploymentType]
+ Employee
+ [^String name
+  ^{:datomic/type          :db.type/tuple
+    :datomic/tupleType     :db/long
+    :model.attr/persisted? true} tupla
+  ^{:type             String
+    :doc              "The very employee number of this employee"
+    :datomic/unique   :db.unique/identity
+    :datomic/fulltext false}
+  number
+  ^Float salary
+  ^Integer age
+  ^DateTime start-date
+  ^Employee supervisor
+  ^{:type        Employee
+    :cardinality [0 n]
+    :doc         "Has documentation"
+    :deprecation "But also deprecation"}
+  co-workers
+  ^{:datomic/type               :db.type/keyword
+    :model.attr/apenas-runtime? true}
+  keyword-type
+  ^{:datomic/type :db.type/uri}
+  uri-type
+  ^{:datomic/type :db.type/double}
+  double-type
+  ^{:datomic/type :db.type/bigdec
+    :deprecation  "This is deprecated"}
+  bigdec-type
+  ^EmploymentType employment-type
+  ^Estado-Workflow-Employee status-employee
+  ^SearchResult last-search-results]
 
-  ^{:enum true
-    :model.attr/dominio :enum/teste}
-  EmploymentType
-  [FULL_TIME
-   ^{:doc "Documented enum"}
-   PART_TIME]]
+ ^{:union true}
+ SearchResult
+ [Employee Person EmploymentType]
+
+ ^{:enum               true
+   :model.attr/dominio :enum/employment-type}
+ EmploymentType
+ [FULL_TIME
+  ^{:doc "Documented enum"}
+  PART_TIME]
+
+ ^{:enum               true
+   :model.attr/dominio :enum/estado-workflow.person}
+ Estado-Workflow-Person
+ [ACEITO_PERSON]
+
+ ^{:enum               true
+   :model.attr/dominio :enum/estado-workflow.employee}
+ Estado-Workflow-Employee
+ [ACEITO_EMPLOYEE]
+
+ ^{:enum               true
+   :union              true
+   :model.attr/dominio :enum/estados-workflow}
+ Estados-Workflow
+ [Estado-Workflow.Employee Estado-Workflow.Person]]
