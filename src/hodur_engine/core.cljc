@@ -370,7 +370,7 @@
                      :type/PascalCaseName (->PascalCaseKeyword i)
                      :type/snake_case_name (->snake_case_keyword i)
                      :type/nature :primitive}))
-          accum '[String Float Integer Boolean DateTime ID]))
+          accum '[String Float Integer Boolean DateTime ID Keyword Symbol UUID Uri]))
 
 (defn ^:private internal-schema
   [source-schemas]
